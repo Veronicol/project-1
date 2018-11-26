@@ -5,9 +5,11 @@ function Square(ctx) {
   this.w = SQUARE_SIZE;
   this.h = SQUARE_SIZE;
 
+  this.x0 = this.x;
+
   this.vx = 0;
-  this.vy = 0;
-  this.gravity = 0.25;
+  this.vy0 = 0.25;
+  this.vy = this.vy0
 
   this.setListeners();
 }
@@ -29,18 +31,32 @@ Square.prototype.setListeners = function() {
 };
 
 Square.prototype.onKeyDown = function(event) {
+  if (this.vy === 0) { return; }
+
   switch (event.keyCode) {
     case KEY_RIGHT:
-      this.vx = 3;
+      if (this.x === this.x0) {
+        this.vx = 15;
+        this.x += this.vx;
+      } else {
+        this.vx = 30;
+        this.x += this.vx;
+      }
       break;
     case KEY_LEFT:
-      this.vx = -3;
+      if (this.x === this.x0) {
+        this.vx = -15;
+        this.x += this.vx;
+      } else {
+        this.vx = -30;
+        this.x += this.vx;
+      }
       break;
-    // case KEY_UP:
+    // case KEY_UP:     //cuando tenga bloques, servirá para girarlos
     //   this.rotate();
     //   break;
     case KEY_DOWN:
-      this.vy += 10;
+      this.vy += 5;
       break;
   }
 };
@@ -51,15 +67,19 @@ Square.prototype.onKeyUp = function(event) {
     case KEY_LEFT:
       this.vx = 0;
       break;
+      case KEY_DOWN:
+      this.vy = this.vy0;
+      break;
+
   }
 };
 
 Square.prototype.move = function() {
-  this.y += this.gravity + this.vy;
-  this.x += this.vx;
+  this.y += this.vy;
 
-  if (this.y >= this.ctx.canvas.height - SQUARE_SIZE) {
+  if (this.y >= this.ctx.canvas.height - SQUARE_SIZE) { // todo lo que tenga que ver con el movimiento en y lo paso a Game para controlar las colisiones
     this.y = this.ctx.canvas.height - SQUARE_SIZE;
+    this.vy = 0;
   }
   if (this.x >= this.ctx.canvas.width - SQUARE_SIZE) {
     this.x = this.ctx.canvas.width - SQUARE_SIZE;

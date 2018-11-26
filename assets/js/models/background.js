@@ -12,12 +12,4 @@ Background.prototype.draw = function() {
   this.ctx.rect(this.x, this.y, this.w, this.h);
   this.ctx.fill();
   this.ctx.closePath();
-
-  this.ctx.strokeStyle = 'white';
-  this.ctx.beginPath();
-  this.ctx.moveTo(150, 0);
-  this.ctx.lineTo(150,600)
-  this.ctx.stroke();
-  this.ctx.closePath();
-
 }
