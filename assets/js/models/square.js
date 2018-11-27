@@ -1,6 +1,6 @@
 function Square(ctx) {
   this.ctx = ctx;
-  this.x = this.ctx.canvas.width / 2 - SQUARE_SIZE / 2;
+  this.x = this.ctx.canvas.width / 2 - SQUARE_SIZE;
   this.y = 0;
   this.w = SQUARE_SIZE;
   this.h = SQUARE_SIZE;
@@ -8,7 +8,7 @@ function Square(ctx) {
   this.x0 = this.x;
 
   this.vx = 0;
-  this.vy0 = 0.25;
+  this.vy0 = 0.5;
   this.vy = this.vy0
 
   this.setListeners();
@@ -35,28 +35,18 @@ Square.prototype.onKeyDown = function(event) {
 
   switch (event.keyCode) {
     case KEY_RIGHT:
-      if (this.x === this.x0) {
-        this.vx = 15;
-        this.x += this.vx;
-      } else {
-        this.vx = 30;
-        this.x += this.vx;
-      }
+      this.vx = 30;
+      this.x += this.vx;
       break;
     case KEY_LEFT:
-      if (this.x === this.x0) {
-        this.vx = -15;
-        this.x += this.vx;
-      } else {
-        this.vx = -30;
-        this.x += this.vx;
-      }
+      this.vx = -30;
+      this.x += this.vx;
       break;
     // case KEY_UP:     //cuando tenga bloques, servirá para girarlos
     //   this.rotate();
     //   break;
-    case KEY_DOWN:
-      this.vy += 5;
+    // case KEY_DOWN:  //no funcionan las colisiones con KEY_DOWN!!
+    //   this.vy += 5;
       break;
   }
 };
@@ -70,22 +60,27 @@ Square.prototype.onKeyUp = function(event) {
       case KEY_DOWN:
       this.vy = this.vy0;
       break;
-
   }
 };
 
 Square.prototype.move = function() {
   this.y += this.vy;
 
-  if (this.y >= this.ctx.canvas.height - SQUARE_SIZE) { // todo lo que tenga que ver con el movimiento en y lo paso a Game para controlar las colisiones
-    this.y = this.ctx.canvas.height - SQUARE_SIZE;
+  if (this.y >= this.ctx.canvas.height - this.h) { 
+    this.y = this.ctx.canvas.height - this.h;
     this.vy = 0;
   }
-  if (this.x >= this.ctx.canvas.width - SQUARE_SIZE) {
-    this.x = this.ctx.canvas.width - SQUARE_SIZE;
+
+  if (this.x >= this.ctx.canvas.width - this.w) {
+    this.x = this.ctx.canvas.width - this.w;
   }
+
   if (this.x <= 0) {
     this.x = 0;
   }
 }
+
+// Square.prototype.stop = function(block) {
+//   return this.y + this.h >= block.y
+// }
 

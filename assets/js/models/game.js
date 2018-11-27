@@ -5,8 +5,30 @@ function Game(canvas) {
   this.square = new Square(this.ctx);
 
   this.blocksArray = [];
-  this.drawCount = 0;  // no lo necesito para nada de momento ¿?
+  this.counterArray = [
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+    ];
 
+  this.drawInitializer = 0; 
 }
 
 Game.prototype.start = function() {
@@ -22,15 +44,17 @@ Game.prototype.start = function() {
 
 Game.prototype.draw = function() {
   this.background.draw();
-  // this.square.draw();
   this.blocksArray.forEach(function(block) {
     block.draw();
   });
-  if (this.drawCount === 0 || this.blocksArray[this.blocksArray.length - 1].vy === 0) {  // la condición tiene que ser "si el bloque actual se ha parado"
+    if (this.drawInitializer === 0) {  
     this.addBlock();
-  //   this.drawCount = 0;  // no lo necesito para nada de momento ¿?
   }  
-  this.drawCount++;
+
+  // if (this.drawInitializer === 0 || this.blocksArray[this.blocksArray.length - 1].vy === 0) {  
+  //   this.addBlock();
+  // }  
+  this.drawInitializer++;
 
 }
 
@@ -39,13 +63,28 @@ Game.prototype.addBlock = function() {
   this.blocksArray.push(block);
 }
 
-
 Game.prototype.move = function() {
-  // this.square.move();
   var currentBlock = this.blocksArray[this.blocksArray.length - 1];
   currentBlock.move();
+
+  var blocksArrayCloned = this.blocksArray;
+  var collision = blocksArrayCloned.filter(function(blocksToCollideWith){
+    return blocksToCollideWith.y === currentBlock.y + currentBlock.h
+    && blocksToCollideWith.x === currentBlock.x;
+  });
+
+  if (collision[0]) {
+    currentBlock.vy = 0;
+  }
+
+  if (this.blocksArray[this.blocksArray.length - 1].vy === 0) {  
+    this.counterArray[currentBlock.x / SQUARE_SIZE][currentBlock.y / SQUARE_SIZE] = 1; 
+    this.addBlock();
+  }  
 }
+
 
 Game.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 }
+
