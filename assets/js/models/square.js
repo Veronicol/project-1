@@ -8,9 +8,9 @@ function Square(ctx) {
   this.x0 = this.x;
 
   this.vx = 0;
-  this.vy0 = 0.5;
-  this.vy = this.vy0
-
+  // this.vy0 = 30;
+  // this.vy = this.vy0
+  this.moveIntervalCount = 0;
   this.setListeners();
 }
 
@@ -45,8 +45,8 @@ Square.prototype.onKeyDown = function(event) {
     // case KEY_UP:     //cuando tenga bloques, servirá para girarlos
     //   this.rotate();
     //   break;
-    // case KEY_DOWN:  //no funcionan las colisiones con KEY_DOWN!!
-    //   this.vy += 5;
+    case KEY_DOWN:  
+      this.y += this.h;
       break;
   }
 };
@@ -58,13 +58,15 @@ Square.prototype.onKeyUp = function(event) {
       this.vx = 0;
       break;
       case KEY_DOWN:
-      this.vy = this.vy0;
+      this.y = this.y;
       break;
   }
 };
 
 Square.prototype.move = function() {
-  this.y += this.vy;
+  this.moveIntervalCount++;
+  if (this.moveIntervalCount % FALL_INTERVAL === 0)
+  this.y += this.h;
 
   if (this.y >= this.ctx.canvas.height - this.h) { 
     this.y = this.ctx.canvas.height - this.h;

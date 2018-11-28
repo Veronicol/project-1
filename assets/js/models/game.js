@@ -87,4 +87,3 @@ Game.prototype.move = function() {
 Game.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 }
-
