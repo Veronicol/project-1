@@ -5,12 +5,9 @@ function Square(ctx) {
   this.w = SQUARE_SIZE;
   this.h = SQUARE_SIZE;
 
-  this.x0 = this.x;
-
-  this.vx = 0;
-  // this.vy0 = 30;
-  // this.vy = this.vy0
+  this.stopY = false;
   this.moveIntervalCount = 0;
+
   this.setListeners();
 }
 
@@ -31,16 +28,14 @@ Square.prototype.setListeners = function() {
 };
 
 Square.prototype.onKeyDown = function(event) {
-  if (this.vy === 0) { return; }
-
+  if (this.stopY === true) { return; }
+  
   switch (event.keyCode) {
     case KEY_RIGHT:
-      this.vx = 30;
-      this.x += this.vx;
+      this.x += SQUARE_SIZE;
       break;
     case KEY_LEFT:
-      this.vx = -30;
-      this.x += this.vx;
+      this.x -= SQUARE_SIZE;
       break;
     // case KEY_UP:     //cuando tenga bloques, servirá para girarlos
     //   this.rotate();
@@ -55,7 +50,7 @@ Square.prototype.onKeyUp = function(event) {
   switch (event.keyCode) {
     case KEY_RIGHT:
     case KEY_LEFT:
-      this.vx = 0;
+      this.x = this.x;
       break;
       case KEY_DOWN:
       this.y = this.y;
@@ -70,7 +65,7 @@ Square.prototype.move = function() {
 
   if (this.y >= this.ctx.canvas.height - this.h) { 
     this.y = this.ctx.canvas.height - this.h;
-    this.vy = 0;
+    this.stopY = true;
   }
 
   if (this.x >= this.ctx.canvas.width - this.w) {
@@ -81,8 +76,3 @@ Square.prototype.move = function() {
     this.x = 0;
   }
 }
-
-// Square.prototype.stop = function(block) {
-//   return this.y + this.h >= block.y
-// }
-
