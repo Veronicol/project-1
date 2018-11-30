@@ -5,6 +5,8 @@ function Square(ctx) {
   this.w = SQUARE_SIZE;
   this.h = SQUARE_SIZE;
 
+  this.stopXleft = false;
+  this.stopXright =false;
   this.stopY = false;
   this.moveIntervalCount = 0;
 
@@ -32,9 +34,11 @@ Square.prototype.onKeyDown = function(event) {
   
   switch (event.keyCode) {
     case KEY_RIGHT:
+    if (this.stopXright === true) { return; }
       this.x += SQUARE_SIZE;
       break;
     case KEY_LEFT:
+      if (this.stopXleft === true) { return; }
       this.x -= SQUARE_SIZE;
       break;
     // case KEY_UP:     //cuando tenga bloques, servirá para girarlos

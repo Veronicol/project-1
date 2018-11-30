@@ -58,13 +58,25 @@ function Game(canvas) {
     var collisions = [];
     this.gameboard.forEach(function(lines){
       lines.forEach(function(blocksToCollideWith) {
-        //collision on x-axis on going:
-        if ( blocksToCollideWith.x + blocksToCollideWith.w <= this.currentBlock.x
+        
+        if ( blocksToCollideWith.x + blocksToCollideWith.w === this.currentBlock.x
           && blocksToCollideWith.y === this.currentBlock.y) {
-          this.currentBlock.x = blocksToCollideWith.x + blocksToCollideWith.w;
+          this.currentBlock.stopXleft = true;
+        } else if ( blocksToCollideWith.x + blocksToCollideWith.w != this.currentBlock.x
+            && blocksToCollideWith.y === this.currentBlock.y) {
+            this.currentBlock.stopXleft = false;
         }
+
+        if ( blocksToCollideWith.x === this.currentBlock.x + this.currentBlock.w
+          && blocksToCollideWith.y === this.currentBlock.y) {
+          this.currentBlock.stopXright = true;
+        } else if ( blocksToCollideWith.x != this.currentBlock.x + this.currentBlock.w
+            && blocksToCollideWith.y === this.currentBlock.y) {
+            this.currentBlock.stopXright = false;
+        }
+
         if ( blocksToCollideWith.y === this.currentBlock.y + this.currentBlock.h
-        && blocksToCollideWith.x === this.currentBlock.x ) {
+          && blocksToCollideWith.x === this.currentBlock.x ) {
           collisions.push(blocksToCollideWith);
         }
       }.bind(this))
