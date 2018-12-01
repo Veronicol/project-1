@@ -1,10 +1,7 @@
 function Square(ctx) {
   this.ctx = ctx;
-  // this.x = 0;
-  // this.y = 0;
   this.w = SQUARE_SIZE;
   this.h = SQUARE_SIZE;
-  // this.color = "";
 }
 
 Square.prototype.draw = function(x,y,color) {

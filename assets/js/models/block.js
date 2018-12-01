@@ -1,7 +1,9 @@
 function Block(ctx) {
   this.ctx = ctx;
   this.x = 120;
-  this.y = -30;
+
+  this.y = 0;
+  this.yMin = 0;
 
   this.stopXleft = false;
   this.stopXright =false;
@@ -74,13 +76,19 @@ Block.prototype.onKeyUp = function(event) {
   }
 };
 
+Block.prototype.arrayClone = function( arr ) {
+  if( Array.isArray( arr ) ) {
+      var copy = arr.slice( 0 );
+      for( var i = 0; i < copy.length; i++ ) {
+          copy[ i ] = this.arrayClone( copy[ i ] );
+      }
+      return copy;
+  }
+  return arr;
+}
+
 Block.prototype.rotate = function(block) { 
-  var rotatedBlock = [
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0]
-  ]
+  var rotatedBlock = this.arrayClone(block);
   for (i = 0; i <= block.length - 1; i++) {
     for ( j = 0; j <= block[i].length - 1; j++){
       rotatedBlock[i][j] = block[j][block.length -1 - i];
@@ -91,8 +99,29 @@ Block.prototype.rotate = function(block) {
 
 Block.prototype.move = function() {
   this.moveIntervalCount++;
+
   if (this.moveIntervalCount % FALL_INTERVAL === 0) {
     this.y += SQUARE_SIZE;
   }
-
+  console.log(this.y);
+  this.yMin = this.y + (this.calculateMin(this.currentBlock.matrix) * SQUARE_SIZE);
+  if (this.yMin >= this.ctx.canvas.height ) { 
+    this.y = this.ctx.canvas.height - (this.calculateMin(this.currentBlock.matrix) * SQUARE_SIZE);
+    this.stopY = true;
+  }
 }
+
+Block.prototype.calculateMin = function(block) {
+  var newMatrix = [];
+
+  for (i = 0; i <= block.length - 1; i++) {
+    var newLine= block[i].filter(function(elem) {
+      return elem != 0;
+    });
+    if (newLine.length > 0) {
+      newMatrix.push(newLine);
+    }
+  }
+  return newMatrix.length;
+}
+
