@@ -3,6 +3,7 @@ function Game(canvas) {
 
   this.background = new Background(this.ctx);
   this.currentBlock = new Block(this.ctx);
+  this.helper = new Helpers();
 
   this.gameboard = [
     [0,0,0,0,0,0,0,0,0,0],
@@ -40,19 +41,25 @@ function Game(canvas) {
   Game.prototype.draw = function() {
     this.background.draw();
     this.currentBlock.draw();
-    // this.gameboard.forEach(function(line) {
-    //   line.forEach(function(block) {
-    //     if (block != 0 ) {
-    //       block.draw();
-    //     }
-    //   })
-    // });
-    // this.clearLines();
+
+    for (i = 0; i <= this.gameboard.length - 1; i++) {
+      var y = i * SQUARE_SIZE;
+  
+      for (j = 0; j <= this.gameboard[i].length -1; j++) { 
+        var x = j * SQUARE_SIZE;
+        if (this.gameboard[i][j] !== 0 ) {
+  
+          square = new Square(this.ctx);
+          square.draw(x, y, this.helper.getColor(this.gameboard[i][j]));
+        }
+      }
+    }
+
+    this.clearLines();
   }
 
   Game.prototype.move = function() {
     this.currentBlock.move();
-    
   //   var collisions = [];
   //   this.gameboard.forEach(function(lines){
   //     lines.forEach(function(blocksToCollideWith) {
@@ -83,41 +90,48 @@ function Game(canvas) {
   //   if (collisions[0]) {
   //     this.currentBlock.stopY = true;
   //   }
-    
-    // if (this.currentBlock.stopY === true) {
-    //   this.gameboard[this.currentBlock.y / SQUARE_SIZE][this.currentBlock.x / SQUARE_SIZE] = this.currentBlock;
-    //   this.currentBlock = new Block(this.ctx);
-    // }
+  
+
+    if (this.currentBlock.stopY === true) {
+      for (i = 0; i <= this.currentBlock.currentBlock.length - 1; i++) {
+        for (j = 0; j <= this.currentBlock.currentBlock[i].length - 1; j++){
+          if (this.currentBlock.currentBlock[i][j] !== 0 ) {
+            this.gameboard[( this.currentBlock.y / SQUARE_SIZE ) + i ][( this.currentBlock.x / SQUARE_SIZE ) + j] = this.currentBlock.currentBlock[i][j];
+          }
+        }
+      }
+      this.currentBlock = new Block(this.ctx);
+    }
   }
 
-  // Game.prototype.clearLines = function() {
-  //   for (i = 0; i <= this.gameboard.length - 1; i++) {
+  Game.prototype.clearLines = function() {
+    for (i = 0; i <= this.gameboard.length - 1; i++) {
   
-  //     var line = this.gameboard[i];
-  //     var counterElements = 0;
+      var line = this.gameboard[i];
+      var counterElements = 0;
     
-  //     for (j = 0; j <= this.gameboard[i].length -1; j++) {   
-  //       if (line[j] != 0) {
-  //         counterElements++;
-  //       }
-  //     };
+      for (j = 0; j <= this.gameboard[i].length -1; j++) {   
+        if (line[j] != 0) {
+          counterElements++;
+        }
+      };
     
-  //     if (counterElements === this.gameboard[i].length) {
-  //       this.gameboard.splice(i,1);
-  //       this.gameboard.unshift(EMPTY_GAMEBOARD_LINE);
-  //       for (i = 0; i <= this.gameboard.length - 1; i++) {
+      if (counterElements === this.gameboard[i].length) {
+        this.gameboard.splice(i,1);
+        this.gameboard.unshift(EMPTY_GAMEBOARD_LINE);
+        for (i = 0; i <= this.gameboard.length - 1; i++) {
   
-  //         var line = this.gameboard[i];
+          var line = this.gameboard[i];
         
-  //         for (j = 0; j <= this.gameboard[i].length -1; j++) {   
-  //           if (line[j] != 0) {
-  //             line[j].y += line[j].w;
-  //           }
-  //         };
-  //       };
-  //     };
-  //   };
-  // }
+          for (j = 0; j <= this.gameboard[i].length -1; j++) {   
+            if (line[j] != 0) {
+              line[j].y += line[j].w;
+            }
+          };
+        };
+      };
+    };
+  }
 
   Game.prototype.clear = function() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);

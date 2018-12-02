@@ -12,68 +12,47 @@ var KEY_SPACE = 32;
 
 var EMPTY_GAMEBOARD_LINE = [0,0,0,0,0,0,0,0,0,0];
 
-var J_BLOCK = {
-  matrix: [
+var J_BLOCK = [
     [1,1,1],
     [0,0,1],
     [0,0,0]
-  ],
-  color: "#fcfca8"
-}
+  ];
 
-var L_BLOCK = {
-  matrix: [
-    [1,1,1],
-    [1,0,0],
+var L_BLOCK = [
+    [2,2,2],
+    [2,0,0],
     [0,0,0]
-  ],
-  color: "#f8aff2"
-}
+  ];
 
-var O_BLOCK  = {
-  matrix: [
-    [1,1],
-    [1,1],
-  ],
-  color: "#8c8af8"
-}
+var O_BLOCK  = [
+    [3,3],
+    [3,3],
+  ];
 
-var I_BLOCK = {
-  matrix: [
+var I_BLOCK = [
     [0,0,0,0],
-    [1,1,1,1],
+    [4,4,4,4],
     [0,0,0,0],
     [0,0,0,0]
-  ],
-  color: "#fd997a"
-}
+  ];
 
-var T_BLOCK = {
-  matrix: [
-    [1,1,1],
-    [0,1,0],
+var T_BLOCK = [
+    [5,5,5],
+    [0,5,0],
     [0,0,0]
-  ],
-  color: "#b0fabb"
-}
+  ];
 
-var Z_BLOCK = {
-  matrix: [
-    [1,1,0],
-    [0,1,1],
+var Z_BLOCK = [
+    [6,6,0],
+    [0,6,6],
     [0,0,0]
-  ],
-  color: "#ffd95d"
-}
+  ];
 
-var S_BLOCK = {
-  matrix: [
-    [0,1,1],
-    [1,1,0],
+var S_BLOCK = [
+    [0,7,7],
+    [7,7,0],
     [0,0,0]
-  ],
-  color: "#afc2f8"
-}
+  ];
 
 
 
