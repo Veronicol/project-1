@@ -84,10 +84,10 @@ function Game(canvas) {
   //     this.currentBlock.stopY = true;
   //   }
     
-    if (this.currentBlock.stopY === true) {
-      // this.gameboard[this.currentBlock.y / SQUARE_SIZE][this.currentBlock.x / SQUARE_SIZE] = this.currentBlock;
-      // this.currentBlock = new Block(this.ctx);
-    }
+    // if (this.currentBlock.stopY === true) {
+    //   this.gameboard[this.currentBlock.y / SQUARE_SIZE][this.currentBlock.x / SQUARE_SIZE] = this.currentBlock;
+    //   this.currentBlock = new Block(this.ctx);
+    // }
   }
 
   // Game.prototype.clearLines = function() {

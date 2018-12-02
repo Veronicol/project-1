@@ -4,7 +4,7 @@ function Square(ctx) {
   this.h = SQUARE_SIZE;
 }
 
-Square.prototype.draw = function(x,y,color) {
+Square.prototype.draw = function(x, y, color) {
   this.ctx.fillStyle = color;
   this.ctx.beginPath();
   this.ctx.rect(x, y, this.w, this.h);
