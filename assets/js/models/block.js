@@ -7,7 +7,7 @@ function Block(ctx) {
 
   this.blocks = [I_BLOCK, O_BLOCK, T_BLOCK, Z_BLOCK, S_BLOCK, L_BLOCK, J_BLOCK];
 
-  this.currentBlock = this.blocks[this.getRandomBlock(this.blocks)];
+  this.blockMatrix = this.blocks[this.getRandomBlock(this.blocks)];
 
   this.setListeners();
   this.helper = new Helpers();
@@ -16,15 +16,15 @@ function Block(ctx) {
 
 Block.prototype.draw = function() {
 
-  for (i = 0; i <= this.currentBlock.length - 1; i++) {
+  for (i = 0; i <= this.blockMatrix.length - 1; i++) {
     var y = this.y + i * SQUARE_SIZE;
 
-    for (j = 0; j <= this.currentBlock[i].length -1; j++) { 
+    for (j = 0; j <= this.blockMatrix[i].length -1; j++) { 
       var x = this.x + j * SQUARE_SIZE;
-      if (this.currentBlock[i][j] !== 0 ) {
+      if (this.blockMatrix[i][j] !== 0 ) {
 
         this.square = new Square(this.ctx);
-        this.square.draw(x, y, this.helper.getColor(this.currentBlock[i][j]));
+        this.square.draw(x, y, this.helper.getColor(this.blockMatrix[i][j]));
       }
     }
   }
@@ -53,7 +53,7 @@ Block.prototype.onKeyDown = function(event) {
       this.x -= SQUARE_SIZE;
       break;
     case KEY_UP:    
-      this.currentBlock = this.rotate(this.currentBlock);
+      this.blockMatrix = this.rotate(this.blockMatrix);
       break;
     case KEY_DOWN:  
       this.y += SQUARE_SIZE;
@@ -106,33 +106,38 @@ Block.prototype.move = function() {
   this.collitionXcanvasRight();
 }
 
-  Block.prototype.collitionYcanvas = function() {
-    var emptyElements = 0;
-    var emptyLines = 0;
-    for (i = this.currentBlock.length - 1; i >= 0; i-- ) {
-      for (j = 0; j <= this.currentBlock[i].length - 1; j++ ) {
-        if ( this.currentBlock[i][j] === 0) {
-          emptyElements++;
-        }
-      }
-      if ( this.currentBlock[i].length === emptyElements) {
-        emptyElements = 0;
-        emptyLines++;
-      } else {
-        break;
+Block.prototype.collitionY = function(currentMatrix) {
+  var emptyElements = 0;
+  var emptyLines = 0;
+  for (i = currentMatrix.length - 1; i >= 0; i-- ) {
+    for (j = 0; j <= currentMatrix[i].length - 1; j++ ) {
+      if ( currentMatrix[i][j] === 0) {
+        emptyElements++;
       }
     }
-    if ( this.y + ( SQUARE_SIZE * (this.currentBlock.length - emptyLines)) >= this.ctx.canvas.height ) {
-      this.y = this.ctx.canvas.height - ( SQUARE_SIZE * (this.currentBlock.length - emptyLines));
-      this.stopY = true;
+    if ( currentMatrix[i].length === emptyElements) {
+      emptyElements = 0;
+      emptyLines++;
+    } else {
+      break;
     }
   }
+  return currentMatrix.length - emptyLines;
+}
+
+Block.prototype.collitionYcanvas = function() {
+  var yCollition = this.collitionY(this.blockMatrix);
+  if ( this.y + ( SQUARE_SIZE * yCollition ) >= this.ctx.canvas.height ) {
+    this.y = this.ctx.canvas.height - ( SQUARE_SIZE * yCollition);
+    this.stopY = true;
+  }
+}
 
   Block.prototype.collitionXcanvasLeft = function() {
     var position;
-    for (i = 0; i <= this.currentBlock.length - 1; i++ ) {
-      for (j = 0; j <= this.currentBlock[i].length - 1; j++ ) {
-        if ( this.currentBlock[j][i] !== 0) {
+    for (i = 0; i <= this.blockMatrix.length - 1; i++ ) {
+      for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
+        if ( this.blockMatrix[j][i] !== 0) {
           position = i;
           break;
         }
@@ -148,9 +153,9 @@ Block.prototype.move = function() {
 
   Block.prototype.collitionXcanvasRight = function() {
     var position;
-    for (i = this.currentBlock.length - 1; i >= 0; i-- ) {
-      for (j = 0; j <= this.currentBlock[i].length - 1; j++ ) {
-        if ( this.currentBlock[j][i] !== 0) {
+    for (i = this.blockMatrix.length - 1; i >= 0; i-- ) {
+      for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
+        if ( this.blockMatrix[j][i] !== 0) {
           position = i;
           break;
         }

@@ -28,6 +28,9 @@ function Game(canvas) {
     [0,0,0,0,0,0,0,0,0,0],
   ];
 
+  var counterBlocks = 0;
+
+
   Game.prototype.start = function() {
     this.intervalId = setInterval(function() {
 
@@ -60,47 +63,21 @@ function Game(canvas) {
 
   Game.prototype.move = function() {
     this.currentBlock.move();
-  //   var collisions = [];
-  //   this.gameboard.forEach(function(lines){
-  //     lines.forEach(function(blocksToCollideWith) {
-        
-  //       if ( blocksToCollideWith.x + blocksToCollideWith.w === this.currentBlock.x
-  //         && blocksToCollideWith.y === this.currentBlock.y) {
-  //         this.currentBlock.stopXleft = true;
-  //       } else if ( blocksToCollideWith.x + blocksToCollideWith.w != this.currentBlock.x
-  //           && blocksToCollideWith.y === this.currentBlock.y) {
-  //           this.currentBlock.stopXleft = false;
-  //       }
+    this.collitionY();
+    this.colltionXleft();
+    this.colltionXright();
 
-  //       if ( blocksToCollideWith.x === this.currentBlock.x + this.currentBlock.w
-  //         && blocksToCollideWith.y === this.currentBlock.y) {
-  //         this.currentBlock.stopXright = true;
-  //       } else if ( blocksToCollideWith.x != this.currentBlock.x + this.currentBlock.w
-  //           && blocksToCollideWith.y === this.currentBlock.y) {
-  //           this.currentBlock.stopXright = false;
-  //       }
-
-  //       if ( blocksToCollideWith.y === this.currentBlock.y + this.currentBlock.h
-  //         && blocksToCollideWith.x === this.currentBlock.x ) {
-  //         collisions.push(blocksToCollideWith);
-  //       }
-  //     }.bind(this))
-  //   }.bind(this));
-
-  //   if (collisions[0]) {
-  //     this.currentBlock.stopY = true;
-  //   }
-  
-
-    if (this.currentBlock.stopY === true) {
-      for (i = 0; i <= this.currentBlock.currentBlock.length - 1; i++) {
-        for (j = 0; j <= this.currentBlock.currentBlock[i].length - 1; j++){
-          if (this.currentBlock.currentBlock[i][j] !== 0 ) {
-            this.gameboard[( this.currentBlock.y / SQUARE_SIZE ) + i ][( this.currentBlock.x / SQUARE_SIZE ) + j] = this.currentBlock.currentBlock[i][j];
+    if (this.currentBlock.stopY) {
+      for (i = 0; i <= this.currentBlock.blockMatrix.length - 1; i++) {
+        for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++){
+          if (this.currentBlock.blockMatrix[i][j] !== 0 ) {
+            this.gameboard[( this.currentBlock.y / SQUARE_SIZE ) + i ][( this.currentBlock.x / SQUARE_SIZE ) + j] = this.currentBlock.blockMatrix[i][j];
           }
         }
       }
       this.currentBlock = new Block(this.ctx);
+      counterBlocks++;
+      console.log(counterBlocks);
     }
   }
 
@@ -131,6 +108,55 @@ function Game(canvas) {
         };
       };
     };
+  }
+
+  Game.prototype.collitionY = function() {
+
+    for ( i = this.currentBlock.blockMatrix.length - 1; i >= 0; i-- ) {
+      for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++ ) {
+        if ( this.currentBlock.blockMatrix[i][j] !== 0 &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE] !== undefined &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE]
+          [(this.currentBlock.x + (j * SQUARE_SIZE)) / SQUARE_SIZE] !== 0 )  {
+
+          this.currentBlock.stopY = true;
+        }
+      }
+    }
+  }
+
+  Game.prototype.colltionXleft = function() {
+    for ( i = 0; i <= this.currentBlock.blockMatrix.length - 1; i++ ) {
+      for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++ ) {
+        if ( this.currentBlock.blockMatrix[i][j] !== 0 &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE] !== undefined &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE]
+          [(this.currentBlock.x + ((j - 1) * SQUARE_SIZE)) / SQUARE_SIZE] !== 0 ) {
+            this.currentBlock.stopXleft = true;
+            var xInit = this.currentBlock.x;
+          } 
+        if ( this.currentBlock.stopXleft === true && xInit !== this.currentBlock.x ) {
+          this.currentBlock.stopXleft = false;
+        }
+      }
+    }
+  }
+
+  Game.prototype.colltionXright = function() {
+    for ( i = 0; i <= this.currentBlock.blockMatrix.length - 1; i++ ) {
+      for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++ ) {
+        if ( this.currentBlock.blockMatrix[i][j] !== 0 &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE] !== undefined &&
+          this.gameboard[(this.currentBlock.y + ((i + 1) * SQUARE_SIZE)) / SQUARE_SIZE]
+          [(this.currentBlock.x + ((j + 1) * SQUARE_SIZE)) / SQUARE_SIZE] !== 0 ) {
+            this.currentBlock.stopXright = true;
+            var xInit = this.currentBlock.x;
+          } 
+        if ( this.currentBlock.stopXright === true && xInit !== this.currentBlock.x ) {
+          this.currentBlock.stopXright = false;
+        }
+      }
+    }
   }
 
   Game.prototype.clear = function() {
