@@ -1,7 +1,7 @@
-function Block(ctx) {
+function Block(ctx,x,y) {
   this.ctx = ctx;
-  this.x = 120;
-  this.y = 0;
+  this.x = x;
+  this.y = y;
   this.stopY = false;
   this.moveIntervalCount = 0;
 

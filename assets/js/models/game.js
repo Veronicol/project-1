@@ -2,7 +2,17 @@ function Game(canvas) {
   this.ctx = canvas.getContext('2d');
 
   this.background = new Background(this.ctx);
-  this.currentBlock = new Block(this.ctx);
+  this.currentBlock = new Block(this.ctx,120,0);
+
+  this.secondaryCanvas = document.getElementById("secondary-canvas");
+  this.secondCtx = this.secondaryCanvas.getContext('2d');
+  this.blockCanvas = new Background(this.secondCtx);
+  this.blockCanvas.draw();
+  // this.nextBlock = new Block(this.secondCtx,30,0);
+  // this.nextBlock.draw();
+
+
+
   this.helper = new Helpers();
 
   this.gameboard = [
@@ -28,17 +38,27 @@ function Game(canvas) {
     [0,0,0,0,0,0,0,0,0,0],
   ];
 
-  var counterBlocks = 0;
-
+  this.intervalId = undefined;
+  this.isGameOver = false;
 
   Game.prototype.start = function() {
-    this.intervalId = setInterval(function() {
 
-    this.clear();
-    this.draw();
-    this.move();
+    if (!this.isRunning()) {
+      this.intervalId = setInterval(function() {
 
-    }.bind(this), DRAW_INTERVAL_MS)
+      this.clear();
+      this.draw();
+      
+      
+      this.move();
+
+     }.bind(this), DRAW_INTERVAL_MS)
+
+    }
+        if (this.isGameOver) {
+        // this.stop();
+        console.log("Game Over");
+    }
   }
 
   Game.prototype.draw = function() {
@@ -57,7 +77,6 @@ function Game(canvas) {
         }
       }
     }
-
     this.clearLines();
   }
 
@@ -67,7 +86,7 @@ function Game(canvas) {
     this.colltionXleft();
     this.colltionXright();
 
-    if (this.currentBlock.stopY) {
+    if (this.currentBlock.stopY ) {
       for (i = 0; i <= this.currentBlock.blockMatrix.length - 1; i++) {
         for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++){
           if (this.currentBlock.blockMatrix[i][j] !== 0 ) {
@@ -75,9 +94,7 @@ function Game(canvas) {
           }
         }
       }
-      this.currentBlock = new Block(this.ctx);
-      counterBlocks++;
-      console.log(counterBlocks);
+      this.currentBlock = new Block(this.ctx,120,0);
     }
   }
 
@@ -157,6 +174,23 @@ function Game(canvas) {
         }
       }
     }
+  }
+
+  Game.prototype.gameOver = function() {
+    this.gameboard[5].some(function(elem) {
+      if ( elem !== 0 ) {
+        this.isGameOver = true;
+      }
+    })
+  }
+
+  Game.prototype.isRunning = function() {
+  return this.intervalId !== undefined;
+  }
+
+  Game.prototype.stop = function () {
+    clearInterval(this.intervalId);
+    this.intervalId = undefined;
   }
 
   Game.prototype.clear = function() {

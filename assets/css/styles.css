@@ -10,11 +10,19 @@ html, body {
 }
 
 canvas {
-  margin: 100px;
+  margin: 50px;
 }
 
-div {
-  width: 50px;
-  height: 50px;
-  background-color: #8c8af8;
+.container {
+  border: 1px solid black;
+  display: flex;
+}
+
+#game {
+  border: 1px solid black;
+  width: 400px;
+}
+
+#content {
+  border: 1px solid black;
 }
