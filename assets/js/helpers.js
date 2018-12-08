@@ -4,24 +4,24 @@ function Helpers() {
   Helpers.prototype.getColor = function(number) {
     switch (number) {
       case 1:
-        return "#fcfca8";
+        return "#ece35e";
         break;
       case 2:
-        return "#f8aff2";
+        return "#f16ac0";
         break;
       case 3:
-        return "#8c8af8";
+        return "#378cf9";
         break;
       case 4:
-        return "rgb(236, 81, 70)";
+        return "#ec5146";
       case 5:
-        return "#b0fabb";
+        return "#4dc162";
         break;
       case 6:
-        return "#ffd95d";
+        return "#f9af42";
         break;
       case 7:
-        return "#afc2f8";
+        return "#39c4d4";
     }
   }
 

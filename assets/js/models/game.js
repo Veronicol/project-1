@@ -1,35 +1,36 @@
 function Game(canvas) {
   this.ctx = canvas.getContext('2d');
-  this.intervalId = undefined;
-
+  this.intervalId = 1;
+  
   this.background = new Background(this.ctx);
-
+  
   this.secondaryCanvas = document.getElementById("secondary-canvas");
   this.secondCtx = this.secondaryCanvas.getContext('2d');
   this.nextBlockBg = new Background(this.secondCtx);
-
+  
   this.gameboard = GAMEBOARD.map(function(elem) {
     var newElem = Object.assign([],elem);
     return newElem;
   });
-
+    
   this.intervalFall = FALL_INTERVAL;
   this.blocksAcumArr = [];
   this.createNewBlock();
-
+  
   this.helper = new Helpers();
 
   this.blocksCounter = 0;
-
+  this.currentLinesRemoved = 0
+  this.linesRemoved = 0;
+  this.score = 0;
 }
 
 Game.prototype.start = function() {
-
+  
   if (!this.isRunning()) {
     this.intervalId = setInterval(function() {
 
     this.clear();
-    
     
     this.drawAll();
     this.moveAll();
@@ -38,7 +39,7 @@ Game.prototype.start = function() {
       this.gameOver();
     }
     }.bind(this), DRAW_INTERVAL_MS)
-  }
+  } 
 }
 
 Game.prototype.drawAll = function() {
@@ -50,7 +51,7 @@ Game.prototype.drawAll = function() {
   this.currentBlock.draw(this.currentBlock.blockMatrix);
   this.nextBlock.draw(this.nextBlock.blockMatrix);
 
-  this.clearLines();
+  this.countClearedLines();
 }
 
 Game.prototype.checkGameOver = function() {
@@ -69,7 +70,10 @@ Game.prototype.moveAll = function() {
   if ( this.currentBlock.stopY ) {
     this.addBlocktoBg();
     this.createNewBlock();
-    //console.log("número de piezas", this.blocksCounter);
+    console.log("número de piezas", this.blocksCounter);
+    console.log("total líneas eliminadas", this.linesRemoved);
+    console.log("líneas eliminadas en esta ronda", this.currentLinesRemoved);
+    console.log("score: ", this.score);
   }
 }
 
@@ -94,7 +98,6 @@ Game.prototype.getNewBlock = function() {
   this.newBlockMatrix = BLOCKS_ARRAY[Math.floor(Math.random() * BLOCKS_ARRAY.length)] ;
   return this.newBlockMatrix;
 }
-
 
 Game.prototype.createNewBlock = function() {
   if ( this.blocksAcumArr.length === 0){
@@ -143,6 +146,8 @@ Game.prototype.clearLines = function() {
     if (counterElements === this.gameboard[i].length) {
       this.gameboard.splice(i,1);
       this.gameboard.unshift(EMPTY_GAMEBOARD_LINE);
+      this.currentLinesRemoved++;
+
       for (i = 0; i <= this.gameboard.length - 1; i++) {
 
         var line = this.gameboard[i];
@@ -155,6 +160,15 @@ Game.prototype.clearLines = function() {
       };
     };
   };
+}
+
+Game.prototype.countClearedLines = function() {
+  for (var i= 0; i < 4; i++) {
+    this.clearLines();
+  }
+  this.linesRemoved += this.currentLinesRemoved;
+  this.score = this.score + this.helper.scoreValues(this.currentLinesRemoved);
+  this.currentLinesRemoved = 0;
 }
 
 Game.prototype.addBlocktoBg = function() {
@@ -222,3 +236,9 @@ Game.prototype.decreaseInterval = function() {
     this.intervalFall = this.intervalFall / 2;
   }
 }
+
+Game.prototype.getScore = function(linesRemoved, score) {
+  var currentRoundScore = this.helper.scoreValues(linesRemoved);
+  var newScore = score + currentRoundScore;
+  return newScore;
+  }
