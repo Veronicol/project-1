@@ -1,38 +1,30 @@
-function Block(ctx,x,y) {
+function Block(ctx,x,y,blockMatrix,fallInterval) {
   this.ctx = ctx;
   this.x = x;
   this.y = y;
+  this.blockMatrix = blockMatrix;
+  this.fallInterval = fallInterval;
   this.stopY = false;
   this.moveIntervalCount = 0;
 
-  this.blocks = [I_BLOCK, O_BLOCK, T_BLOCK, Z_BLOCK, S_BLOCK, L_BLOCK, J_BLOCK];
-
-  this.blockMatrix = this.blocks[this.getRandomBlock(this.blocks)];
-
   this.setListeners();
   this.helper = new Helpers();
-
 }
 
-Block.prototype.draw = function() {
+Block.prototype.draw = function(blockMatrix) {
 
-  for (i = 0; i <= this.blockMatrix.length - 1; i++) {
+  for (i = 0; i <= blockMatrix.length - 1; i++) {
     var y = this.y + i * SQUARE_SIZE;
 
-    for (j = 0; j <= this.blockMatrix[i].length -1; j++) { 
+    for (j = 0; j <= blockMatrix[i].length -1; j++) { 
       var x = this.x + j * SQUARE_SIZE;
       if (this.blockMatrix[i][j] !== 0 ) {
 
         this.square = new Square(this.ctx);
-        this.square.draw(x, y, this.helper.getColor(this.blockMatrix[i][j]));
+        this.square.draw(x, y, this.helper.getColor(blockMatrix[i][j]));
       }
     }
   }
-}
-
-Block.prototype.getRandomBlock = function(blocksArray) {
-  var selectedBlock = Math.floor(Math.random() * blocksArray.length)
-  return selectedBlock;
 }
 
 Block.prototype.setListeners = function() {
@@ -97,10 +89,9 @@ Block.prototype.rotate = function(block) {
 Block.prototype.move = function() {
   this.moveIntervalCount++;
 
-  if (this.moveIntervalCount % FALL_INTERVAL === 0) {
+  if (this.moveIntervalCount % this.fallInterval === 0) {
     this.y += SQUARE_SIZE;
   }
-
   this.collitionYcanvas();
   this.collitionXcanvasLeft();
   this.collitionXcanvasRight();
@@ -133,39 +124,39 @@ Block.prototype.collitionYcanvas = function() {
   }
 }
 
-  Block.prototype.collitionXcanvasLeft = function() {
-    var position;
-    for (i = 0; i <= this.blockMatrix.length - 1; i++ ) {
-      for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
-        if ( this.blockMatrix[j][i] !== 0) {
-          position = i;
-          break;
-        }
-      }
-      if (position !== undefined ) {
+Block.prototype.collitionXcanvasLeft = function() {
+  var position;
+  for (i = 0; i <= this.blockMatrix.length - 1; i++ ) {
+    for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
+      if ( this.blockMatrix[j][i] !== 0) {
+        position = i;
         break;
       }
-    } 
-    if ( this.x + ( SQUARE_SIZE * position) <= 0 ) {
-      this.x = 0 - ( SQUARE_SIZE * position );
     }
+    if (position !== undefined ) {
+      break;
+    }
+  } 
+  if ( this.x + ( SQUARE_SIZE * position) <= 0 ) {
+    this.x = 0 - ( SQUARE_SIZE * position );
   }
+}
 
-  Block.prototype.collitionXcanvasRight = function() {
-    var position;
-    for (i = this.blockMatrix.length - 1; i >= 0; i-- ) {
-      for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
-        if ( this.blockMatrix[j][i] !== 0) {
-          position = i;
-          break;
-        }
-      }
-      if (position !== undefined ) {
+Block.prototype.collitionXcanvasRight = function() {
+  var position;
+  for (i = this.blockMatrix.length - 1; i >= 0; i-- ) {
+    for (j = 0; j <= this.blockMatrix[i].length - 1; j++ ) {
+      if ( this.blockMatrix[j][i] !== 0) {
+        position = i;
         break;
       }
-    } 
-    if ( this.x + ( SQUARE_SIZE * ( position + 1)) >= this.ctx.canvas.width ) {
-      this.x = this.ctx.canvas.width - ( SQUARE_SIZE * ( position + 1));
     }
+    if (position !== undefined ) {
+      break;
+    }
+  } 
+  if ( this.x + ( SQUARE_SIZE * ( position + 1)) >= this.ctx.canvas.width ) {
+    this.x = this.ctx.canvas.width - ( SQUARE_SIZE * ( position + 1));
   }
+}
 

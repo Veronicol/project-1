@@ -13,7 +13,7 @@ function Helpers() {
         return "#8c8af8";
         break;
       case 4:
-        return "#fd997a";
+        return "rgb(236, 81, 70)";
       case 5:
         return "#b0fabb";
         break;
@@ -22,6 +22,25 @@ function Helpers() {
         break;
       case 7:
         return "#afc2f8";
+    }
+  }
+
+  Helpers.prototype.scoreValues = function(lines) {
+    switch (lines) {
+      case 0:
+        return 0;
+      case 1:
+        return 50;
+        break;  
+      case 2:
+        return 150;
+        break;
+      case 3:
+        return 400;
+        break;
+      case 4:
+        return 600;
+        break;
     }
   }
 
