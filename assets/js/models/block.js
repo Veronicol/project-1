@@ -87,7 +87,7 @@ Block.prototype.rotate = function(block) {
 }
 
 Block.prototype.move = function() {
-  this.moveIntervalCount++;
+    this.moveIntervalCount++;
 
   if (this.moveIntervalCount % this.fallInterval === 0) {
     this.y += SQUARE_SIZE;

@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
   font-family: 'Raleway', sans-serif;
-  color: rgb(88,88,88)
+  color: rgb(88,88,88);
 
 }
 
@@ -27,23 +27,31 @@ html, body {
   display: flex;
   justify-content: flex-start;
 }
-.container > div {
+.white-box {
   display: flex;
   background-color: rgb(235,235,235);
-  /* margin-left: 50px; */
   box-shadow: 10px 10px 5px #c3433a;
 }
 
-.instructions {
+.right-container {
+  display: flex;
   width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
   margin-left: 50px;
-  height: 300px;
+}
+
+.instructions {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 
 #main-canvas {
   margin: 50px;
   background-color: rgb(216, 216, 216);
-  border: 5px solid rgb(185, 184, 184);
+  border: 1px solid rgb(185, 184, 184);
   border-top: none;
 }
 
@@ -57,36 +65,83 @@ html, body {
   width: 400px;
 }
 
-#game-content {
+.counter{
+  width: 180px;
+  border: 1px solid rgb(88,88,88);
+  margin-bottom: 50px;
+  padding: 20px;
+}
+
+.number {
+  font-size: 3em;
+  text-align: right;
+  margin: 0;
+}
+
+.counter p {
+  margin: 0;
+}
+
+h1 {
+  margin-top: 100px;
+  color: rgb(235,235,235);
+  font-size: 5em;
+  text-align: center;
+}
+
+h2 {
+  color: rgb(88,88,88);
+  margin: 0;
 }
 
 
+.cheer p{
+  font-size: 1.25em;
+  color: #c3433a;
+}
 
-
-/*
-
-.container {
-  width: 100%;
-  height: 700px;
-  margin: 20px 60px;
+.keys {
+  padding: 10px 0px;
+  margin-top: 15px;
   display: flex;
-  background-color: rgb(235,235,235);
+  justify-content: space-between;
 }
 
-
- .container > div {
-  height: 700px;
-} 
-
-#game {
-  width: 400px;
+.key-container {
+  /* border: 1px solid rgb(212, 211, 211); */
+  width: 110px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 
-#content {
+.icon {
+  border: 1px solid rgb(88,88,88);
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.header {
-  width: 100%;
-  height: 400px;
+.pause {
+  border: 1px solid rgb(88,88,88);
+  border-radius: 5px;
+  width: 80px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 8px;
+  font-size: 0.7em;
 }
-*/
+
+i {
+  font-size: 1.5em;
+  color: rgb(88,88,88);
+}

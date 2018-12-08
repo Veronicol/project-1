@@ -23,22 +23,27 @@ function Game(canvas) {
   this.currentLinesRemoved = 0
   this.linesRemoved = 0;
   this.score = 0;
+  
+  this.isPaused = false;
+  this.onKeyDown();
 }
 
 Game.prototype.start = function() {
+  if ( this.isPaused === false ) {
+
+    if (!this.isRunning()) {
+      this.intervalId = setInterval(function() {
+        
+        this.clear();
+        
+        this.drawAll();
+        this.moveAll();
   
-  if (!this.isRunning()) {
-    this.intervalId = setInterval(function() {
-
-    this.clear();
-    
-    this.drawAll();
-    this.moveAll();
-
-    if (this.checkGameOver()) {
-      this.gameOver();
-    }
-    }.bind(this), DRAW_INTERVAL_MS)
+        if (this.checkGameOver()) {
+          this.gameOver();
+        }
+      }.bind(this), DRAW_INTERVAL_MS)
+    } 
   } 
 }
 
@@ -241,4 +246,19 @@ Game.prototype.getScore = function(linesRemoved, score) {
   var currentRoundScore = this.helper.scoreValues(linesRemoved);
   var newScore = score + currentRoundScore;
   return newScore;
-  }
+}
+
+Game.prototype.onKeyDown = function() {
+  document.addEventListener('keydown', function(event) {
+    if ( event.keyCode === KEY_SPACE ) {
+      console.log("prueba espaciador");
+      this.isPaused = true;
+    }
+  });
+}
+
+// var linesCounter = parent.querySelector('#lines-counter');
+// linesCounter.innerHTML = '';
+// var content = document.createTextNode(SQUARE_SIZE);
+// linesCounter.appendChild(content);
+
