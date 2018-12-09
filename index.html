@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,800,900" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Londrina+Shadow" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/styles.css">
 
   <script src="assets/js/constants.js"></script>
@@ -18,55 +19,88 @@
   <title>Tetris</title>
 </head>
 <body>
-  <div class="start-container" ></div>
-  <div class="background">
-    <div class="container">
-      <div class="game-container white-box">
-        <div id="game">
-          <canvas id="main-canvas" width="300" height="600"></canvas>
-        </div>
-      <div id="game-content white-box">
-        <canvas id="secondary-canvas" width= "180" height="120"></canvas>
-        <div class="counter">
-          <p>Lines:</p>
-          <p id="lines-counter" class="number">17</p>
-        </div>
-        <div class="counter">
-            <p>Score:</p>
-            <p class="number">400</p>
-          </div>
-        <div class="cheer">
-          <p>Well Done!</p>
-          <p>3 lines: 400 points</p>
-        </div>
+  <div class="main-container">
+    <div id="start-container" class="start-end-container active" >
+      <h1 class="title">Tetris time!</h1>
+      <div class="start-end-buttons">
+        <button id="start">start game</button>
+        <button>best scoring</button>
+      </div>
+    </div>
+    <div id="end-container" class= "start-end-container" >
+      <h1 class="title">Oops... game over</h1>
+      <div class="end-form">
+        <div class="support-text">Your Score: </div>
+        <div id="total-score" class="support-text"></div>
+        <div class="support-text">Enter your name:</div>
+        <div class="form-container">
+          <input id="name" type="text" placeholder="Ziggy Stardust">
+          <button id="save-name" class="button">save</button>
         </div>
       </div>
-      <div class="right-container">
-        <h1 class="title">Tetris time!</h1>
-        <div class="white-box instructions">
-          <div>
-            <h2>Instructions:</h2>
+    </div>
+    <div id="score-container" class= "start-end-container" >
+      <h1 class="title">Score</h1>
+      <div class="score-table-container">
+        <div class="score-table">
+          <div id="score-player" class="score-name">
           </div>
-          <div class="keys">
-            <div class="key-container">
-              <div class="icon"><i class="fas fa-arrow-left"></i></div>
-              <div>move left</div>
+          <div id="score-pts" class="score-value">
+          </div>
+        </div>
+        <button id="play-again" >play again</button>
+      </div>
+    </div>
+  
+    <div class="background">
+      <div class="container">
+        <div class="game-container white-box">
+          <div id="game">
+            <canvas id="main-canvas" width="300" height="600"></canvas>
+          </div>
+        <div id="game-content white-box">
+          <canvas id="secondary-canvas" width= "180" height="120"></canvas>
+          <div class="counter">
+            <p>Lines:</p>
+            <p id="lines-counter" class="number">17</p>
+          </div>
+          <div class="counter">
+              <p>Score:</p>
+              <p id="score" class="number">400</p>
             </div>
-            <div class="key-container">
-              <div class="icon"><i class="fas fa-arrow-right"></i></div>
-              <div>move right</div>
+          <div class="cheer">
+            <p id="cheer-message"></p>
+            <p id="cheer-score"></p>
+          </div>
+          </div>
+        </div>
+        <div class="right-container">
+          <h1 class="title">Tetris<br/>time !</h1>
+          <div class="white-box instructions">
+            <div>
+              <h2>Instructions:</h2>
             </div>
-            <div class="key-container">
-              <div class="icon"><i class="fas fa-arrow-down"></i></div>
-              <div>hard drop</div>
-            </div>
-            <div class="key-container">
-              <div class="icon"><i class="fas fa-arrow-up"></i></div>
-              <div>rotate</div>
-            </div>
-            <div class="key-container">
-              <div class="pause">space</div>
-              <div>pause</div>
+            <div class="keys">
+              <div class="key-container">
+                <div class="icon"><i class="fas fa-arrow-left"></i></div>
+                <div>move left</div>
+              </div>
+              <div class="key-container">
+                <div class="icon"><i class="fas fa-arrow-right"></i></div>
+                <div>move right</div>
+              </div>
+              <div class="key-container">
+                <div class="icon"><i class="fas fa-arrow-down"></i></div>
+                <div>hard drop</div>
+              </div>
+              <div class="key-container">
+                <div class="icon"><i class="fas fa-arrow-up"></i></div>
+                <div>rotate</div>
+              </div>
+              <div class="key-container">
+                <div class="pause">space</div>
+                <div>pause</div>
+              </div>
             </div>
           </div>
         </div>

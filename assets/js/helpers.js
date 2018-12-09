@@ -44,4 +44,48 @@ function Helpers() {
     }
   }
 
+  Helpers.prototype.cheerMessage = function(number) {
+    switch (number) {
+      case 1:
+        return 'Are you kidding me?';
+        break;  
+      case 2:
+        return 'You can do better...';
+        break;
+      case 3:
+        return 'Well done!';
+        break;
+      case 4:
+        return 'Simply Perfect!';
+        break;
+    }
+  }
+
+  Helpers.prototype.cheerScore = function(number) {
+    switch (number) {
+      case 1:
+        return '1 line - 50 pts';
+        break;  
+      case 2:
+        return '2 lines - 150 pts';
+        break;
+      case 3:
+        return '3 lines - 400 pts';
+        break;
+      case 4:
+        return '4 lines - 600 pts';
+        break;
+    }
+  }
+
+  this.sounds = [
+      'pop.m4a',
+      'Stranger_Things.m4a',
+  ];
+  
+  
+  Helpers.prototype.play = function(track){
+    new Audio("./audio/" + this.sounds[track]).play();
+  };
+
 }

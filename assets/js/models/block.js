@@ -46,6 +46,8 @@ Block.prototype.onKeyDown = function(event) {
       break;
     case KEY_UP:    
       this.blockMatrix = this.rotate(this.blockMatrix);
+      // var myAudio = new Audio("./audio/pop.m4a");
+      // myAudio.play();
       break;
     case KEY_DOWN:  
       this.y += SQUARE_SIZE;

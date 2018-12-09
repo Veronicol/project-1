@@ -29,23 +29,24 @@ function Game(canvas) {
 }
 
 Game.prototype.start = function() {
-  if ( this.isPaused === false ) {
+  if (!this.isRunning()) {
+    this.intervalId = setInterval(function() {
+      if ( this.isPaused === false ) {
 
-    if (!this.isRunning()) {
-      this.intervalId = setInterval(function() {
-        
         this.clear();
-        
         this.drawAll();
         this.moveAll();
   
         if (this.checkGameOver()) {
           this.gameOver();
+          this.updateFinalScore();
+          this.getPlayerName();
         }
-      }.bind(this), DRAW_INTERVAL_MS)
-    } 
+      }
+    }.bind(this), DRAW_INTERVAL_MS)
   } 
-}
+} 
+
 
 Game.prototype.drawAll = function() {
   this.background.draw();
@@ -57,6 +58,7 @@ Game.prototype.drawAll = function() {
   this.nextBlock.draw(this.nextBlock.blockMatrix);
 
   this.countClearedLines();
+  this.updateLinesScore();
 }
 
 Game.prototype.checkGameOver = function() {
@@ -75,10 +77,6 @@ Game.prototype.moveAll = function() {
   if ( this.currentBlock.stopY ) {
     this.addBlocktoBg();
     this.createNewBlock();
-    console.log("número de piezas", this.blocksCounter);
-    console.log("total líneas eliminadas", this.linesRemoved);
-    console.log("líneas eliminadas en esta ronda", this.currentLinesRemoved);
-    console.log("score: ", this.score);
   }
 }
 
@@ -94,9 +92,12 @@ Game.prototype.gameOver = function() {
   clearInterval(this.intervalId);
   this.intervalId = undefined;
 
-  if (confirm("GAME OVER! Play again?")) {
-    location.reload();
-  }
+  var endContainer = document.querySelector('#end-container');
+  endContainer.classList.add('active');
+
+  // if (confirm("GAME OVER! Play again?")) {
+  //   location.reload();
+  // }
 };
 
 Game.prototype.getNewBlock = function() {
@@ -173,6 +174,7 @@ Game.prototype.countClearedLines = function() {
   }
   this.linesRemoved += this.currentLinesRemoved;
   this.score = this.score + this.helper.scoreValues(this.currentLinesRemoved);
+  this.addCheers();
   this.currentLinesRemoved = 0;
 }
 
@@ -253,12 +255,107 @@ Game.prototype.onKeyDown = function() {
     if ( event.keyCode === KEY_SPACE ) {
       console.log("prueba espaciador");
       this.isPaused = true;
+      console.log("estado Pausa: ", this.isPaused);
+      // clearInterval(this.intervalId);
+      // this.intervalId = undefined;
+    
     }
   });
 }
 
-// var linesCounter = parent.querySelector('#lines-counter');
-// linesCounter.innerHTML = '';
-// var content = document.createTextNode(SQUARE_SIZE);
-// linesCounter.appendChild(content);
+Game.prototype.updateLinesScore = function() {
+  document.querySelector('#lines-counter').textContent = this.linesRemoved;
+  document.querySelector('#score').textContent = this.score;
+}
 
+Game.prototype.addCheers = function() {
+  if (this.currentLinesRemoved !== 0 ) {
+    document.querySelector('#cheer-message').textContent = this.helper.cheerMessage(this.currentLinesRemoved);
+    document.querySelector('#cheer-score').textContent = this.helper.cheerScore(this.currentLinesRemoved);
+    setTimeout(function(){
+      document.querySelector('#cheer-message').innerHTML = '';
+      document.querySelector('#cheer-score').innerHTML = '';
+    }, 1500);
+  }
+}
+
+Game.prototype.updateFinalScore = function() {
+  document.querySelector('#total-score').textContent = this.score;
+}
+
+Game.prototype.getPlayerName = function() {
+  var scoresArr = [];
+  document.querySelector('#save-name').addEventListener('click', function() {
+    var playerName = document.querySelector('#name').value;
+    var finalScore = document.querySelector('#total-score').textContent;
+    this.showScoreTable();
+
+    if ( localStorage.getItem('scores')) {
+      scoresArr = JSON.parse(localStorage.getItem('scores'));
+    }
+    scoresArr.push({'name': playerName, 'score': finalScore});
+    localStorage.setItem('scores', JSON.stringify(scoresArr));
+
+    this.sortPlayers(scoresArr);
+
+    for (var i = 0; i < 10; i++ ) {
+      var newDivName = document.createElement('div'); 
+      var newDivScore = document.createElement('div'); 
+
+      var newPlayer = document.createTextNode((i + 1) + ". " + scoresArr[i].name); 
+      var newScorePlayer = document.createTextNode(scoresArr[i].score+ " pts"); 
+
+      console.log(scoresArr[i].score+ " pts");
+
+      newDivName.appendChild(newPlayer); 
+      newDivScore.appendChild(newScorePlayer);
+    
+      var player = document.querySelector('#score-player');
+      player.appendChild(newDivName);
+
+      var scorePlayer = document.querySelector('#score-pts');
+      scorePlayer.appendChild(newDivScore);
+    }
+
+  }.bind(this));
+
+
+  this.playAgain();
+}
+
+Game.prototype.sortPlayers = function(array) {
+  array.sort(function(a, b) {
+    if (Number(a.score) < Number(b.score)) {
+      return 1;
+    };
+    if (Number(a.score) > Number(b.score)) {
+      return -1;
+    };
+    return 0;
+  });
+}
+
+Game.prototype.showScoreTable = function() {
+  var endContainer = document.querySelector('#end-container');
+  endContainer.classList.remove('active');
+  var scoreTable = document.querySelector('#score-container');
+  scoreTable.classList.add('active');
+}
+
+Game.prototype.playAgain = function() {
+  document.querySelector('#play-again').addEventListener('click', function() {
+    location.reload();
+  });
+}
+
+// Game.prototype.updateScoreTable = function() {
+  
+//   for (var i = 0; i < 10; i++ ) {
+//     var newDiv = document.createElement('div'); 
+//     var newPlayer = document.createTextNode((i + 1) + ". " + scoresArr[i].name); 
+//     newDiv.appendChild(newPlayer); 
+  
+//     var player = document.querySelector('#score-player');
+//     player.appendChild(newDiv);
+//   }
+// }
