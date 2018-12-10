@@ -26,6 +26,7 @@ function Game(canvas) {
   
   this.isPaused = false;
   this.onKeyDown();
+  this.startScoreTable();
 }
 
 Game.prototype.start = function() {
@@ -288,7 +289,7 @@ Game.prototype.getPlayerName = function() {
   document.querySelector('#save-name').addEventListener('click', function() {
     var playerName = document.querySelector('#name').value;
     var finalScore = document.querySelector('#total-score').textContent;
-    this.showScoreTable();
+    this.showScoreTable('#end-container');
 
     if ( localStorage.getItem('scores')) {
       scoresArr = JSON.parse(localStorage.getItem('scores'));
@@ -321,6 +322,7 @@ Game.prototype.getPlayerName = function() {
 
 
   this.playAgain();
+
 }
 
 Game.prototype.sortPlayers = function(array) {
@@ -335,8 +337,8 @@ Game.prototype.sortPlayers = function(array) {
   });
 }
 
-Game.prototype.showScoreTable = function() {
-  var endContainer = document.querySelector('#end-container');
+Game.prototype.showScoreTable = function(selector) {
+  var endContainer = document.querySelector(selector);
   endContainer.classList.remove('active');
   var scoreTable = document.querySelector('#score-container');
   scoreTable.classList.add('active');
@@ -348,14 +350,8 @@ Game.prototype.playAgain = function() {
   });
 }
 
-// Game.prototype.updateScoreTable = function() {
-  
-//   for (var i = 0; i < 10; i++ ) {
-//     var newDiv = document.createElement('div'); 
-//     var newPlayer = document.createTextNode((i + 1) + ". " + scoresArr[i].name); 
-//     newDiv.appendChild(newPlayer); 
-  
-//     var player = document.querySelector('#score-player');
-//     player.appendChild(newDiv);
-//   }
-// }
+Game.prototype.startScoreTable = function() {
+  document.querySelector('#show-scoring').addEventListener('click', function() {
+    this.showScoreTable('#start-container');
+  }.bind(this));
+}
