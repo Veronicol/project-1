@@ -180,7 +180,7 @@ Game.prototype.countClearedLines = function() {
 }
 
 Game.prototype.addBlocktoBg = function() {
-  for (i = 0; i <= this.currentBlock.blockMatrix.length - 1; i++) {
+  for (i = 0; i < this.currentBlock.blockMatrix.length; i++) {
     for (j = 0; j <= this.currentBlock.blockMatrix[i].length - 1; j++){
       if (this.currentBlock.blockMatrix[i][j] !== 0 ) {
         this.gameboard[( this.currentBlock.y / SQUARE_SIZE ) + i ]
@@ -295,9 +295,9 @@ Game.prototype.getPlayerName = function() {
       scoresArr = JSON.parse(localStorage.getItem('scores'));
     }
     scoresArr.push({'name': playerName, 'score': finalScore});
-    localStorage.setItem('scores', JSON.stringify(scoresArr));
-
     this.sortPlayers(scoresArr);
+
+    localStorage.setItem('scores', JSON.stringify(scoresArr));
 
     for (var i = 0; i < 10; i++ ) {
       var newDivName = document.createElement('div'); 
@@ -305,8 +305,6 @@ Game.prototype.getPlayerName = function() {
 
       var newPlayer = document.createTextNode((i + 1) + ". " + scoresArr[i].name); 
       var newScorePlayer = document.createTextNode(scoresArr[i].score+ " pts"); 
-
-      console.log(scoresArr[i].score+ " pts");
 
       newDivName.appendChild(newPlayer); 
       newDivScore.appendChild(newScorePlayer);
@@ -354,4 +352,7 @@ Game.prototype.startScoreTable = function() {
   document.querySelector('#show-scoring').addEventListener('click', function() {
     this.showScoreTable('#start-container');
   }.bind(this));
+  this.playAgain();
 }
+
+
