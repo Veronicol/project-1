@@ -295,6 +295,7 @@ Game.prototype.getPlayerName = function() {
       scoresArr = JSON.parse(localStorage.getItem('scores'));
     }
     scoresArr.push({'name': playerName, 'score': finalScore});
+
     this.sortPlayers(scoresArr);
 
     localStorage.setItem('scores', JSON.stringify(scoresArr));
@@ -352,7 +353,7 @@ Game.prototype.startScoreTable = function() {
   document.querySelector('#show-scoring').addEventListener('click', function() {
     this.showScoreTable('#start-container');
   }.bind(this));
+
   this.playAgain();
 }
-
 
